@@ -2,5 +2,5 @@
 cmake -B build
 cd build
 make
-cd ..
 ctest
+cd ..
