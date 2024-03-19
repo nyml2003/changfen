@@ -14,18 +14,16 @@ typedef struct IdentItem IdentItem;
 typedef struct SignItem SignItem;
 typedef struct IntItem IntItem;
 
-LexTable *newLexTable();
-void destroyTable(LexTable *table);
-void appendIdent(LexTable *table, char *str);
-void appendIdentWithLine(LexTable *table, char *str, int line);
-void appendSign(LexTable *table, TableItemId id);
-void appendSignWithLine(LexTable *table, TableItemId id, int line);
-void appendConstant(LexTable *table, char *num);
-void appendConstantWithLine(LexTable *table, char* num, int line);
-void appendError(LexTable *table, char* error);
-void appendErrorWithLine(LexTable *table, char* error, int line);
-void put(LexTable *table);
-void putln(LexTable *table);
+void appendIdent(char *str);
+void appendIdentWithLine(char *str, int line);
+void appendSign(TableItemId id);
+void appendSignWithLine(TableItemId id, int line);
+void appendConstant(char *num);
+void appendConstantWithLine(char* num, int line);
+void appendError(char* error);
+void appendErrorWithLine(char* error, int line);
+void put();
+void putln();
 
 #ifdef __cplusplus
 };

@@ -8,11 +8,15 @@ FLEX_TARGET(scanner src/scanner.l ${CMAKE_CURRENT_SOURCE_DIR}/src/scanner.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-but-set-variable -Wno-unused-value -Wno-unused-label -Wno-unused-local-typedefs -Wno-unused-private-field")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+add_library(LexTable SHARED src/LexTable.cpp)
+
 
 add_executable(changfen
         ${FLEX_scanner_OUTPUTS}
-        src/LexTable.cpp
 )
+
+target_link_libraries(changfen PUBLIC LexTable)
 
 enable_testing()
 
@@ -28,6 +32,4 @@ foreach (TEST_DIR ${TEST_DIRS})
         NAME ${TEST_DIR}
         COMMAND changfen ${TEST_INPUT} ${TEST_OUTPUT}
     )
-    
-    
 endforeach()

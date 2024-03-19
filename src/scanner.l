@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 static int curr_lineno = 0;
-static LexTable * table = newLexTable();
 
 %}
 
@@ -34,7 +33,7 @@ CONSTANT   [1-9][0-9]*
   [^*\n]+   {  }
   [/*]     {  }
   <<EOF>>   {
-    appendErrorWithLine(table, "Comment not closed", curr_lineno);
+    appendErrorWithLine("Comment not closed", curr_lineno);
     BEGIN(INITIAL);
   }
 }
@@ -55,162 +54,162 @@ CONSTANT   [1-9][0-9]*
     /* let's begin! */
 
 "int" {
-    appendSignWithLine(table, ID_INT, curr_lineno);
+    appendSignWithLine(ID_INT, curr_lineno);
 }
 
 "if" {
-    appendSignWithLine(table, ID_IF, curr_lineno);
+    appendSignWithLine(ID_IF, curr_lineno);
 }
 
 "else" {
-    appendSignWithLine(table, ID_ELSE,  curr_lineno);
+    appendSignWithLine(ID_ELSE,  curr_lineno);
 }
 
 "while" {
-    appendSignWithLine(table, ID_WHILE, curr_lineno);
+    appendSignWithLine(ID_WHILE, curr_lineno);
 }
 
 "for" {
-    appendSignWithLine(table, ID_FOR, curr_lineno);
+    appendSignWithLine(ID_FOR, curr_lineno);
 }
 
 "write" {
-    appendSignWithLine(table, ID_WRITE, curr_lineno);
+    appendSignWithLine(ID_WRITE, curr_lineno);
 }
 
 "read" {
-    appendSignWithLine(table, ID_READ, curr_lineno);
+    appendSignWithLine(ID_READ, curr_lineno);
 }
 
 "return" {
-    appendSignWithLine(table, ID_RETURN, curr_lineno);
+    appendSignWithLine(ID_RETURN, curr_lineno);
 }
 
 "continue" {
-    appendSignWithLine(table, ID_CONTINUE,  curr_lineno);
+    appendSignWithLine(ID_CONTINUE,  curr_lineno);
 }
 
 "break" {
-    appendSignWithLine(table, ID_BREAK, curr_lineno);
+    appendSignWithLine(ID_BREAK, curr_lineno);
 }
 
 {IDENTIFIER} {
-    appendIdentWithLine(table, yytext, curr_lineno);
+    appendIdentWithLine(yytext, curr_lineno);
 }
 
 {CONSTANT} {
-    appendConstantWithLine(table, yytext, curr_lineno);
+    appendConstantWithLine(yytext, curr_lineno);
 }
 
 "<=" { 
-    appendSignWithLine(table, ID_LE, curr_lineno);
+    appendSignWithLine(ID_LE, curr_lineno);
 }
 
 ">=" {
-    appendSignWithLine(table, ID_GE, curr_lineno);
+    appendSignWithLine(ID_GE, curr_lineno);
 }
 
 "!=" {
-    appendSignWithLine(table, ID_NE, curr_lineno);
+    appendSignWithLine(ID_NE, curr_lineno);
 }
 
 "==" {
-    appendSignWithLine(table, ID_EQ, curr_lineno);
+    appendSignWithLine(ID_EQ, curr_lineno);
 }
 
 "&&" {
-    appendSignWithLine(table, ID_LAND, curr_lineno);
+    appendSignWithLine(ID_LAND, curr_lineno);
 }
 
 "||" {
-    appendSignWithLine(table, ID_LOR, curr_lineno);
+    appendSignWithLine(ID_LOR, curr_lineno);
 }
 
 "<<" {
-    appendSignWithLine(table, ID_LS, curr_lineno);
+    appendSignWithLine(ID_LS, curr_lineno);
 }
 
 ">>" {
-    appendSignWithLine(table, ID_RS, curr_lineno);
+    appendSignWithLine(ID_RS, curr_lineno);
 }
 
 "<" {
-    appendSignWithLine(table, ID_LT, curr_lineno);
+    appendSignWithLine(ID_LT, curr_lineno);
 }
 
 ">" {
-    appendSignWithLine(table, ID_GT, curr_lineno);
+    appendSignWithLine(ID_GT, curr_lineno);
 }
 
 "+" {
-    appendSignWithLine(table, ID_PLUS, curr_lineno);
+    appendSignWithLine(ID_PLUS, curr_lineno);
 }
 
 "-" {
-    appendSignWithLine(table, ID_SUB, curr_lineno);
+    appendSignWithLine(ID_SUB, curr_lineno);
 }
 
 "*" {
-    appendSignWithLine(table, ID_MUL, curr_lineno);
+    appendSignWithLine(ID_MUL, curr_lineno);
 }
 
 "/" {
-    appendSignWithLine(table, ID_DIV, curr_lineno);
+    appendSignWithLine(ID_DIV, curr_lineno);
 }
 
 "|" {
-    appendSignWithLine(table, ID_BOR, curr_lineno);
+    appendSignWithLine(ID_BOR, curr_lineno);
 }
 
 "&" {
-    appendSignWithLine(table, ID_BAND, curr_lineno);
+    appendSignWithLine(ID_BAND, curr_lineno);
 }
 
 "^" {
-    appendSignWithLine(table, ID_XOR, curr_lineno);
+    appendSignWithLine(ID_XOR, curr_lineno);
 }
 
 
 "!" {
-    appendSignWithLine(table, ID_NOT, curr_lineno);
+    appendSignWithLine(ID_NOT, curr_lineno);
 }
 
 
 
 "=" {
-    appendSignWithLine(table, ID_ASSIGN, curr_lineno);
+    appendSignWithLine(ID_ASSIGN, curr_lineno);
 }
 
 "(" {
-    appendSignWithLine(table, ID_LBRACKET, curr_lineno);
+    appendSignWithLine(ID_LBRACKET, curr_lineno);
 }
 
 ")" {
-    appendSignWithLine(table, ID_RBRACKET, curr_lineno);
+    appendSignWithLine(ID_RBRACKET, curr_lineno);
 }
 
 "{" {
-    appendSignWithLine(table, ID_BIG_LBRACKET, curr_lineno);
+    appendSignWithLine(ID_BIG_LBRACKET, curr_lineno);
 }
 
 "}" {
-    appendSignWithLine(table, ID_BIG_RBRACKET, curr_lineno);
+    appendSignWithLine(ID_BIG_RBRACKET, curr_lineno);
 }
 
 ";" {
-    appendSignWithLine(table, ID_SEMICOLON, curr_lineno);
+    appendSignWithLine(ID_SEMICOLON, curr_lineno);
 }
 
 "[" {
-    appendSignWithLine(table, ID_MID_LBRACKET, curr_lineno);
+    appendSignWithLine(ID_MID_LBRACKET, curr_lineno);
 }
 
 "]" {
-    appendSignWithLine(table, ID_MID_RBRACKET, curr_lineno);
+    appendSignWithLine(ID_MID_RBRACKET, curr_lineno);
 }
 
 "," {
-    appendSignWithLine(table, ID_COMMA, curr_lineno);
+    appendSignWithLine(ID_COMMA, curr_lineno);
 }
 
 [ \t] {  
@@ -229,5 +228,5 @@ int main(int argc, char **argv) {
     yyin = fopen(input, "r");
     freopen(output, "w", stdout);
     yylex();
-    putln(table);
+    putln();
 }

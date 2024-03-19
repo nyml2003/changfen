@@ -150,6 +150,12 @@ struct IntItem : TableItem {
 
 struct LexTable {
     std::vector<TableItem *> table;
+    static LexTable *instance;
+    static LexTable *getInstance(){
+        if (instance == nullptr)
+            instance = new LexTable();
+        return instance;
+    }
     LexTable()
     {
         table.clear();
@@ -198,56 +204,50 @@ struct LexTable {
     }
 };
 
-extern "C" LexTable *newLexTable(){
-    return new LexTable();
+LexTable *LexTable::instance = nullptr;
+
+
+extern "C" void appendIdent(char *str){
+    LexTable::getInstance()->appendIdent(str);
 }
 
-extern "C" void destroyTable(LexTable *table)
+extern "C" void appendIdentWithLine(char *str, int line)
 {
-    delete table;
+    LexTable::getInstance()->appendIdent(str, line);
 }
 
-extern "C" void appendIdent(LexTable *table, char *str){
-    table->appendIdent(str);
+extern "C" void appendSign(TableItemId id){
+    LexTable::getInstance()->appendSign(id);
 }
 
-extern "C" void appendIdentWithLine(LexTable *table, char *str, int line)
+extern "C" void appendSignWithLine(TableItemId id, int line)
 {
-    table->appendIdent(str, line);
+    LexTable::getInstance()->appendSign(id, line);
 }
 
-extern "C" void appendSign(LexTable *table, TableItemId id){
-    table->appendSign(id);
+extern "C" void appendConstant( char *num){
+    LexTable::getInstance()->appendConstant(atoi(num));
 }
 
-extern "C" void appendSignWithLine(LexTable *table, TableItemId id, int line)
+extern "C" void appendConstantWithLine(char* num, int line)
 {
-    table->appendSign(id, line);
+    LexTable::getInstance()->appendConstant(atoi(num), line);
 }
 
-extern "C" void appendConstant(LexTable *table, char *num){
-    table->appendConstant(atoi(num));
+extern "C" void appendError(char* error){
+    LexTable::getInstance()->appendError(error);
 }
 
-extern "C" void appendConstantWithLine(LexTable *table, char* num, int line)
-{
-    table->appendConstant(atoi(num), line);
+extern "C" void appendErrorWithLine(char* error, int line){
+    LexTable::getInstance()->appendError(error, line);
 }
 
-extern "C" void appendError(LexTable *table, char* error){
-    table->appendError(error);
+extern "C" void put(){
+    LexTable::getInstance()->put();
 }
 
-extern "C" void appendErrorWithLine(LexTable *table, char* error, int line){
-    table->appendError(error, line);
-}
-
-extern "C" void put(LexTable *table){
-    table->put();
-}
-
-extern "C" void putln(LexTable *table){
-    table->putln();
+extern "C" void putln(){
+    LexTable::getInstance()->putln();
 }
 
 
