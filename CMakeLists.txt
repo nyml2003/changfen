@@ -4,16 +4,13 @@ project(changfen)
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(FLEX REQUIRED)
-FLEX_TARGET(scanner src/scanner.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
+FLEX_TARGET(scanner src/scanner.l ${CMAKE_CURRENT_SOURCE_DIR}/src/scanner.cpp)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-but-set-variable -Wno-unused-value -Wno-unused-label -Wno-unused-local-typedefs -Wno-unused-private-field")
 
 add_executable(changfen
         ${FLEX_scanner_OUTPUTS}
-        src/lexical_analyzer.h
-        src/LexTable.hpp
         src/LexTable.cpp
 )
 
