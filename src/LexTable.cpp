@@ -104,7 +104,7 @@ struct IdentItem : TableItem {
     }
     void put() override {
         if (line == -1)
-            printf("( %d, %s )", id, name);
+            printf("( %s, %s )", tokenToString[id], name);
         else printf("at line %d: ( %s, %s )", line, tokenToString[id], name);
     }
     ~IdentItem(){
@@ -121,7 +121,7 @@ struct SignItem : TableItem {
     }
     void put() override {
         if (line == -1)
-            printf("( %d )", id);
+            printf("( sign, %s )", tokenToString[id]);
         else printf("at line %d: ( sign, %s )", line, tokenToString[id]);
     }
     ~SignItem() {
@@ -141,7 +141,7 @@ struct IntItem : TableItem {
     }
     void put() override{
         if (line == -1)
-            printf("( %d, %d )", id, num);
+            printf("( %s, %d )", tokenToString[id], num);
         else printf("at line %d: ( %s, %d )", line, tokenToString[id], num);
     }
     ~IntItem() {

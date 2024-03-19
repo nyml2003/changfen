@@ -1,0 +1,24 @@
+000at line 1: ( sign, int )
+at line 1: ( identiter, main )
+at line 1: ( sign, ( )
+at line 1: ( sign, ) )
+at line 1: ( sign, { )
+at line 2: ( sign, int )
+at line 2: ( identiter, a )
+at line 2: ( sign, , )
+at line 2: ( identiter, b )
+at line 2: ( sign, ; )
+at line 3: ( identiter, a )
+at line 3: ( sign, = )
+at line 3: ( sign, ; )
+at line 4: ( identiter, b )
+at line 4: ( sign, = )
+at line 4: ( sign, ; )
+at line 5: ( sign, return )
+at line 5: ( identiter, a )
+at line 5: ( sign, + )
+at line 5: ( identiter, b )
+at line 5: ( sign, + )
+at line 5: ( constant, 75 )
+at line 5: ( sign, ; )
+at line 6: ( sign, } )
