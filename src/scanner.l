@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "VarSymbolTable.hpp"
 
-static int curr_lineno = 0;
+static int curr_lineno = 1;
 
 void PrintCon(char * token){
    printf("#%d ( %d , %s ,Con_%d)\n",curr_lineno, ID_CONSTANT, token,con(token)); // constant
@@ -51,12 +51,13 @@ CONSTANT   [1-9][0-9]*
   "*/"      {
     BEGIN(INITIAL);
   }
-  [^*\n]+   { 
-   }
-  [/*]     {  }
-    \n        {
+  \n        {
         curr_lineno++;
     }
+  [^*\n]+   {
+   }
+  [/*]     {  }
+    
   <<EOF>>   {
     PrintError("comment not closed");
     BEGIN(INITIAL);

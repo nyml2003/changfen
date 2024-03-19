@@ -1,15 +1,7 @@
-/*****12321321312321*/
+//test add of hex and oct
 int main(){
-
-
-
-    /*123123*/
-    /**
-     * 
-     * 
-     * 
-     * 
-     *
-    */1
-    
+    int a, b;
+    a = 0xf;
+    b = 0xc;
+    return a + b + 075;
 }

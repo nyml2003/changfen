@@ -1,0 +1,53 @@
+#1 ( 3 , - )
+#1, ( 2 , main ,Var_0)
+#1 ( 21 , - )
+#1 ( 22 , - )
+#1 ( 25 , - )
+this is a new line
+#2, ( 2 , float ,Var_1)
+#2, ( 2 , a ,Var_2)
+#2 ( 23 , - )
+#2, ( 2 , b ,Var_3)
+#2 ( 24 , - )
+this is a new line
+#3 ( 3 , - )
+#3, ( 2 , c ,Var_4)
+#3 ( 20 , - )
+#3 ( 2 , 85 ,Con_0)
+#3 ( 24 , - )
+this is a new line
+#4, ( 2 , a ,Var_2)
+#4 ( 20 , - )
+#4 ( 2 , 30 ,Con_1)
+#4 ( 24 , - )
+this is a new line
+#5, ( 2 , b ,Var_3)
+#5 ( 20 , - )
+#5, ( 2 , getfloat ,Var_5)
+#5 ( 21 , - )
+#5 ( 22 , - )
+#5 ( 24 , - )
+this is a new line
+#6, ( 2 , putfloat ,Var_6)
+#6 ( 21 , - )
+#6, ( 2 , a ,Var_2)
+#6 ( 10 , - )
+#6, ( 2 , b ,Var_3)
+#6 ( 22 , - )
+#6 ( 24 , - )
+this is a new line
+#7, ( 2 , a ,Var_2)
+#7 ( 20 , - )
+#7, ( 2 , min ,Var_7)
+#7 ( 21 , - )
+#7 ( 2 , 10 ,Con_2)
+#7 ( 23 , - )
+#7, ( 2 , a ,Var_2)
+#7 ( 22 , - )
+#7 ( 24 , - )
+this is a new line
+#8 ( 27 , - )
+0#8 ( 24 , - )
+this is a new line
+#9 ( 26 , - )
+this is a new line

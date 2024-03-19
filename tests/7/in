@@ -1,0 +1,25 @@
+/*
+///213213/123/12/312/312/3////312
+*/
+
+// Path: tests/7/out
+
+int main(){
+
+    /***
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 21312
+    */
+    float a, b;
+    int c = 85;//
+    a = 30;
+    b = getfloat();
+    putfloat(a + b);
+    a=min(10,a);
+    return 0;
+}
