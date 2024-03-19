@@ -1,9 +1,30 @@
 %{
-#include "LexTable.hpp"
+
+
+#include "ConSymbolTable.hpp"
 #include "lexical_analyzer.h"
 #include <stdio.h>
+#include "VarSymbolTable.hpp"
 
 static int curr_lineno = 0;
+
+void PrintCon(char * token){
+   printf("#%d ( %d , %s ,Con_%d)\n",curr_lineno, ID_CONSTANT, token,con(token)); // constant
+}
+
+void PrintVar(char * token){
+   printf("#%d, ( %d , %s ,Var_%d)\n",curr_lineno, ID_CONSTANT, token,var(token)); // constant
+}
+
+
+
+void PrintID(int id){
+   printf("#%d ( %d , - )\n",curr_lineno, id);
+}
+
+void PrintError(const char *s){
+    printf("#%d, ERROR: %s\n", curr_lineno, s);
+}
 
 %}
 
@@ -30,10 +51,14 @@ CONSTANT   [1-9][0-9]*
   "*/"      {
     BEGIN(INITIAL);
   }
-  [^*\n]+   {  }
+  [^*\n]+   { 
+   }
   [/*]     {  }
+    \n        {
+        curr_lineno++;
+    }
   <<EOF>>   {
-    appendErrorWithLine("Comment not closed", curr_lineno);
+    PrintError("comment not closed");
     BEGIN(INITIAL);
   }
 }
@@ -47,172 +72,176 @@ CONSTANT   [1-9][0-9]*
     curr_lineno++;
     BEGIN(INITIAL);
   }
-  [^\n]* {  }
+  [^\n]* { 
+    
+   }
 
 }
 
     /* let's begin! */
 
 "int" {
-    appendSignWithLine(ID_INT, curr_lineno);
+    PrintID(ID_INT);
 }
 
 "if" {
-    appendSignWithLine(ID_IF, curr_lineno);
+    PrintID(ID_IF);
 }
 
 "else" {
-    appendSignWithLine(ID_ELSE,  curr_lineno);
+    PrintID(ID_ELSE);
+
 }
 
 "while" {
-    appendSignWithLine(ID_WHILE, curr_lineno);
+    PrintID(ID_WHILE);
 }
 
 "for" {
-    appendSignWithLine(ID_FOR, curr_lineno);
+    PrintID(ID_FOR);
 }
 
 "write" {
-    appendSignWithLine(ID_WRITE, curr_lineno);
+    PrintID(ID_WRITE);
 }
 
 "read" {
-    appendSignWithLine(ID_READ, curr_lineno);
+    PrintID(ID_READ);
 }
 
 "return" {
-    appendSignWithLine(ID_RETURN, curr_lineno);
+    PrintID(ID_RETURN);
 }
 
 "continue" {
-    appendSignWithLine(ID_CONTINUE,  curr_lineno);
+    PrintID(ID_CONTINUE);
 }
 
 "break" {
-    appendSignWithLine(ID_BREAK, curr_lineno);
+    PrintID(ID_BREAK);
 }
 
 {IDENTIFIER} {
-    appendIdentWithLine(yytext, curr_lineno);
+    PrintVar(yytext);
 }
 
 {CONSTANT} {
-    appendConstantWithLine(yytext, curr_lineno);
+    PrintCon(yytext);
 }
 
 "<=" { 
-    appendSignWithLine(ID_LE, curr_lineno);
+    PrintID(ID_LE);
 }
 
 ">=" {
-    appendSignWithLine(ID_GE, curr_lineno);
+    PrintID(ID_GE);
 }
 
 "!=" {
-    appendSignWithLine(ID_NE, curr_lineno);
+    PrintID(ID_NE);
 }
 
 "==" {
-    appendSignWithLine(ID_EQ, curr_lineno);
+    PrintID(ID_EQ);
 }
 
 "&&" {
-    appendSignWithLine(ID_LAND, curr_lineno);
+    PrintID(ID_LAND);
 }
 
 "||" {
-    appendSignWithLine(ID_LOR, curr_lineno);
+    PrintID(ID_LOR);
 }
 
 "<<" {
-    appendSignWithLine(ID_LS, curr_lineno);
+    PrintID(ID_LS);
 }
 
 ">>" {
-    appendSignWithLine(ID_RS, curr_lineno);
+    PrintID(ID_RS);
 }
 
 "<" {
-    appendSignWithLine(ID_LT, curr_lineno);
+    PrintID(ID_LT);
 }
 
 ">" {
-    appendSignWithLine(ID_GT, curr_lineno);
+    PrintID(ID_GT);
 }
 
 "+" {
-    appendSignWithLine(ID_PLUS, curr_lineno);
+    PrintID(ID_PLUS);
 }
 
 "-" {
-    appendSignWithLine(ID_SUB, curr_lineno);
+    PrintID(ID_SUB);
 }
 
 "*" {
-    appendSignWithLine(ID_MUL, curr_lineno);
+    PrintID(ID_MUL);
 }
 
 "/" {
-    appendSignWithLine(ID_DIV, curr_lineno);
+    PrintID(ID_DIV);
 }
 
 "|" {
-    appendSignWithLine(ID_BOR, curr_lineno);
+    PrintID(ID_BOR);
 }
 
 "&" {
-    appendSignWithLine(ID_BAND, curr_lineno);
+    PrintID(ID_BAND);
 }
 
 "^" {
-    appendSignWithLine(ID_XOR, curr_lineno);
+    PrintID(ID_XOR);
 }
 
 
 "!" {
-    appendSignWithLine(ID_NOT, curr_lineno);
+    PrintID(ID_NOT);
 }
 
 
 
 "=" {
-    appendSignWithLine(ID_ASSIGN, curr_lineno);
+    PrintID(ID_ASSIGN);
 }
 
 "(" {
-    appendSignWithLine(ID_LBRACKET, curr_lineno);
+    PrintID(ID_LBRACKET);
 }
 
 ")" {
-    appendSignWithLine(ID_RBRACKET, curr_lineno);
+    PrintID(ID_RBRACKET);
 }
 
 "{" {
-    appendSignWithLine(ID_BIG_LBRACKET, curr_lineno);
+    PrintID(ID_BIG_LBRACKET);
 }
 
 "}" {
-    appendSignWithLine(ID_BIG_RBRACKET, curr_lineno);
+    PrintID(ID_BIG_RBRACKET);
 }
 
 ";" {
-    appendSignWithLine(ID_SEMICOLON, curr_lineno);
+    PrintID(ID_SEMICOLON);
 }
 
 "[" {
-    appendSignWithLine(ID_MID_LBRACKET, curr_lineno);
+    PrintID(ID_MID_LBRACKET);
 }
 
 "]" {
-    appendSignWithLine(ID_MID_RBRACKET, curr_lineno);
+    PrintID(ID_MID_RBRACKET);
 }
 
 "," {
-    appendSignWithLine(ID_COMMA, curr_lineno);
+    PrintID(ID_COMMA);
 }
 
-[ \t] {  
+[ \t\f\v\r]+ {
+    // do nothing
 }
 
 \n {
@@ -228,5 +257,4 @@ int main(int argc, char **argv) {
     yyin = fopen(input, "r");
     freopen(output, "w", stdout);
     yylex();
-    putln();
 }
