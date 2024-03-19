@@ -25,7 +25,7 @@ void appendSign(TableItemId id);
  * @return void
  * @note 会创建一个新的常数项，并将其添加到符号表中
  */
-void appendConstant(int num);
+void appendConstant(char *num, int radix);
 /**
  * @brief 添加错误项
  * @param error 未识别的字符
@@ -51,7 +51,11 @@ void putln();
  * @return 常数项的序号
  * @note 兼容VarSymbolTable中的var函数
  */
-int con(char *num);
+int con(char *num, int radix);
+/**
+ * @brief 获取最后一个常数项的值
+*/
+int getLastConstant();
 #ifdef __cplusplus
 };
 #endif

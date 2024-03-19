@@ -8,15 +8,15 @@
 
 static int curr_lineno = 1;
 
-void PrintCon(char * token){
-   printf("#%d ( %d , %s ,Con_%d)\n",curr_lineno, ID_CONSTANT, token,con(token)); // constant
+void PrintCon(char * token,int radix){
+    int index = con(token,radix);
+    int value = getLastConstant();
+   printf("#%d ( %d , %d ,Con_%d)\n",curr_lineno, ID_CONSTANT, value,index); // constant
 }
 
 void PrintVar(char * token){
    printf("#%d, ( %d , %s ,Var_%d)\n",curr_lineno, ID_CONSTANT, token,var(token)); // constant
 }
-
-
 
 void PrintID(int id){
    printf("#%d ( %d , - )\n",curr_lineno, id);
@@ -34,7 +34,12 @@ void PrintError(const char *s){
 /*似乎并没有下划线。。？*/
 
 IDENTIFIER [a-zA-Z][a-zA-Z0-9]*
-CONSTANT   [1-9][0-9]*
+INT_HEX 0[xX][0-9a-fA-F]+
+INT_OCT 0[1-7][0-7]*
+INT_DEC [1-9][0-9]*
+ZERO 0
+
+
 
 %x COMMENT
 %x INLINE_COMMENT
@@ -126,8 +131,20 @@ CONSTANT   [1-9][0-9]*
     PrintVar(yytext);
 }
 
-{CONSTANT} {
-    PrintCon(yytext);
+{INT_HEX} {
+    PrintCon(yytext,16);
+}
+
+{INT_OCT} {
+    PrintCon(yytext,8);
+}
+
+{INT_DEC} {
+    PrintCon(yytext,10);
+}
+
+{ZERO} {
+    PrintCon(yytext,10);
 }
 
 "<=" { 

@@ -57,9 +57,9 @@ struct SignItem : TableItem {
 
 struct IntItem : TableItem {
     int num;
-    IntItem(int num){
+    IntItem(char* num, int radix){
         this->id = ID_CONSTANT;
-        this->num = num;
+        this->num = strtol(num, nullptr, radix);
     }
     void put() override{
         printf("( %d, %d )", id, num);
@@ -89,8 +89,8 @@ struct ConSymbolTable {
     void appendSign(TableItemId id){
         table.push_back(new SignItem(id));
     }
-    void appendConstant(int num){
-        table.push_back(new IntItem(num));
+    void appendConstant(char* num, int radix){
+        table.push_back(new IntItem(num, radix));
     }
     void appendError(char error){
         table.push_back(new ErrorItem(error));
@@ -127,12 +127,12 @@ extern "C" void appendSign(TableItemId id){
     ConSymbolTable::getInstance()->appendSign(id);
 }
 
-extern "C" void appendConstant(int num){
-    ConSymbolTable::getInstance()->appendConstant(num);
+extern "C" void appendConstant(char *num, int radix){
+    ConSymbolTable::getInstance()->appendConstant(num, radix);
 }
 
-extern "C" int con(char *num){
-    ConSymbolTable::getInstance()->appendConstant(atoi(num));
+extern "C" int con(char *num, int radix){
+    ConSymbolTable::getInstance()->appendConstant(num, radix);
     return ConSymbolTable::getInstance()->table.size() - 1;
 }
 
@@ -148,6 +148,8 @@ extern "C" void putln(){
     ConSymbolTable::getInstance()->putln();
 }
 
-
+extern "C" int getLastConstant(){
+    return ((IntItem *)ConSymbolTable::getInstance()->table.back())->num;
+}
 
 
