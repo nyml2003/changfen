@@ -14,6 +14,12 @@ void PrintCon(char * token,int radix){
    printf("#%d ( %d , %d ,Con_%d)\n",curr_lineno, ID_CONSTANT, value,index); // constant
 }
 
+void PrintDouble(char * token){
+    int index = conDouble(token);
+    double value = getLastDoubleConstant();
+    printf("#%d ( %d , %f ,Con_%d)\n",curr_lineno, ID_CONSTANT, value,index); // constant
+}
+
 void PrintVar(char * token){
    printf("#%d, ( %d , %s ,Var_%d)\n",curr_lineno, ID_CONSTANT, token,var(token)); // constant
 }
@@ -36,7 +42,9 @@ void PrintError(const char *s){
 IDENTIFIER [a-zA-Z][a-zA-Z0-9]*
 INT_HEX 0[xX][0-9a-fA-F]+
 INT_OCT 0[1-7][0-7]*
+INT_BIN 0[bB][0-1]*
 INT_DEC [1-9][0-9]*
+FLOAT_DEC [1-9][0-9]*\.[0-9]+
 ZERO 0
 
 
@@ -127,9 +135,7 @@ ZERO 0
     PrintID(ID_BREAK);
 }
 
-{IDENTIFIER} {
-    PrintVar(yytext);
-}
+
 
 {INT_HEX} {
     PrintCon(yytext,16);
@@ -143,8 +149,20 @@ ZERO 0
     PrintCon(yytext,10);
 }
 
+{INT_BIN} {
+    PrintCon(yytext+2,2);
+}
+
+{FLOAT_DEC} {
+    PrintDouble(yytext);
+}
+
 {ZERO} {
     PrintCon(yytext,10);
+}
+
+{IDENTIFIER} {
+    PrintVar(yytext);
 }
 
 "<=" { 

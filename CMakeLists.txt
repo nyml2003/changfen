@@ -12,8 +12,8 @@ add_library(ConSymbolTable SHARED src/ConSymbolTable.cpp)
 add_library(VarSymbolTable SHARED src/VarSymbolTable.cpp)
 
 add_executable(
-    changfen
-        ${FLEX_scanner_OUTPUTS}
+    changfen 
+    ${FLEX_scanner_OUTPUTS}
 )
 target_link_libraries(changfen PUBLIC  VarSymbolTable ConSymbolTable)
 

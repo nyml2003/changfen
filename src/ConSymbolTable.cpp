@@ -68,6 +68,19 @@ struct IntItem : TableItem {
     }
 };
 
+struct DoubleItem : TableItem {
+    double num;
+    DoubleItem(char* num){
+        this->id = ID_CONSTANT;
+        this->num = atof(num);
+    }
+    void put() override{
+        printf("( %d, %f )", id, num);
+    }
+    ~DoubleItem() {
+    }
+};
+
 struct ConSymbolTable {
     std::vector<TableItem *> table;
     static ConSymbolTable * instance;
@@ -91,6 +104,9 @@ struct ConSymbolTable {
     }
     void appendConstant(char* num, int radix){
         table.push_back(new IntItem(num, radix));
+    }
+    void appendDouble(char* num){
+        table.push_back(new DoubleItem(num));
     }
     void appendError(char error){
         table.push_back(new ErrorItem(error));
@@ -152,4 +168,12 @@ extern "C" int getLastConstant(){
     return ((IntItem *)ConSymbolTable::getInstance()->table.back())->num;
 }
 
+extern "C" int conDouble(char *num){
+    ConSymbolTable::getInstance()->appendDouble(num);
+    return ConSymbolTable::getInstance()->table.size() - 1;
+}
+
+extern "C" double getLastDoubleConstant(){
+    return ((DoubleItem *)ConSymbolTable::getInstance()->table.back())->num;
+}
 

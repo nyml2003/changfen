@@ -56,8 +56,12 @@ int con(char *num, int radix);
  * @brief 获取最后一个常数项的值
 */
 int getLastConstant();
+
+int conDouble(char *num);
+double getLastDoubleConstant();
 #ifdef __cplusplus
 };
+
 #endif
 
 #endif // CHANG_FEN_LEX_CON_SYMBOL_TABLE_HPP

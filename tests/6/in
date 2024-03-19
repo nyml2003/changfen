@@ -1,11 +1,12 @@
 /*This program calculates the area of a circle with a given radius.
   But the value of PI and radius are both misspelled.
 */
-int main(){
-    //3.14 is misspelled
-    float pi = 3l14;
-    //2.0 is misspelled
-    float r = 2f;
+int main()
+{
+    // 3.14 is pi
+    float pi = 3.14;
+    // 2 is radius
+    float r = 2;
     float area = pi * r * r;
-    putfloat(area);
+    printf(area);
 }
