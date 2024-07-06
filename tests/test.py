@@ -81,7 +81,7 @@ def log(logfile, command, exec_result):
     logfile.write(f'\n')
 
 def test(executable_path: str, testcase_dir: str, output_dir: str,
-         runtime_lib_dir: str, exec_timeout: int):
+         runtime_lib_dir: str, exec_timeout: int, test_ir: bool, output_std: bool):
 
     testcase_list = []
 
@@ -99,14 +99,14 @@ def test(executable_path: str, testcase_dir: str, output_dir: str,
 
     dfs(testcase_dir)
 
-    result_md = f"# Test Result\n\n"
+    result_md = f"# Test Result\n "
     testcase_cnt = len(testcase_list)
     correct_cnt = 0
-    result_md_table = f"| Testcase | Status |\n"
-    result_md_table += f"| -------- | ------ |\n"
+    result_md_table = f"| Testcase | Status | Time |\n"
+    result_md_table += f"| -------- | ------ | ---- |\n"
 
     for testcase in testcase_list:
-        start_time = datetime.datetime.now()
+        start_test_time = datetime.datetime.now()
         basename: str = os.path.basename(testcase)
 
         in_path = f'{testcase}.in'
@@ -118,6 +118,7 @@ def test(executable_path: str, testcase_dir: str, output_dir: str,
         tokens_path = os.path.join(output_dir, f'{basename}.toks')
         ast_path = os.path.join(output_dir, f'{basename}.ast')
         ir_path = os.path.join(output_dir, f'{basename}.ll')
+        opt_ir_path = os.path.join(output_dir, f'{basename}.opt.ll')
         asm_path = os.path.join(output_dir, f'{basename}.s')
         obj_from_ir_path = os.path.join(output_dir, f'{basename}.ir.o')
         out_path = os.path.join(output_dir, f'{basename}.out')
@@ -136,32 +137,32 @@ def test(executable_path: str, testcase_dir: str, output_dir: str,
 
         command = (f'{executable_path} {testcase}.sy '
                    f'--emit-ir {ir_path} '
-                   f'-o {asm_path}'
-                   f' --emit-ast {ast_path} ')
-
+                   f'--emit-opt-ir {opt_ir_path} '
+                   f'-o {asm_path}')
 
         exec_result = execute(command, exec_timeout)
         log(log_file, command, exec_result)
 
         if exec_result['returncode'] is None:
             if exec_result['stderr'] == 'TIMEOUT':
-                result_md_table += f"| `{testcase}` | ⚠️ sed TLE |\n"
+                result_md_table += f"| `{testcase}` | ⚠️ sed TLE | {datetime.datetime.now() - start_test_time} |\n"
                 print(f'[  ERROR  ] (sed TLE) {testcase}')
             else:
-                result_md_table += f"| `{testcase}` | ⚠️ sed RE |\n"
+                result_md_table += f"| `{testcase}` | ⚠️ sed RE | {datetime.datetime.now() - start_test_time} |\n"
                 print(f'[  ERROR  ] (sed RE) {testcase}')
 
             continue
-
-        # command = (f'llvm-link -opaque-pointers {ir_path} '
-        #            f'{runtime_lib_dir}/libmylib.ll '
-        #            f'{runtime_lib_dir}/libsysy.ll '
-        #            f'-o {exec_path}')
         
-        command = ('riscv64-linux-gnu-gcc '
-                   f'-march=rv64gc {asm_path} '
-                   f'-L{runtime_lib_dir} -lsysy '
-                   f'-o {exec_path}')
+        if test_ir:
+            command = (f'llvm-link -opaque-pointers {opt_ir_path} '
+                    f'{runtime_lib_dir}/libmylib.ll '
+                    f'{runtime_lib_dir}/libsysy.ll '
+                    f'-o {exec_path}')
+        else:
+            command = ('riscv64-linux-gnu-gcc '
+                    f'-march=rv64gc {asm_path} '
+                    f'-L{runtime_lib_dir} -lsysy '
+                    f'-o {exec_path}')
         
         
         exec_result = execute(command, exec_timeout)
@@ -169,36 +170,46 @@ def test(executable_path: str, testcase_dir: str, output_dir: str,
 
         if exec_result['returncode'] is None:
             if exec_result['stderr'] == 'TIMEOUT':
-                result_md_table += f"| `{testcase}` | ⚠️ sed TLE |\n"
+                result_md_table += f"| `{testcase}` | ⚠️ sed TLE | {datetime.datetime.now() - start_test_time} |\n"
                 print(f'[  ERROR  ] (sed TLE) {testcase}')
             else:
-                result_md_table += f"| `{testcase}` | ⚠️ sed RE |\n"
+                result_md_table += f"| `{testcase}` | ⚠️ sed RE | {datetime.datetime.now() - start_test_time} |\n"
                 print(f'[  ERROR  ] (sed RE) {testcase}')
 
-            continue
+            exit()
+        elif exec_result['returncode'] != 0:
+            result_md_table += f"| `{testcase}` | ⚠️ sed RE (syntax) | {datetime.datetime.now() - start_test_time}| \n"
+            print(f'[  ERROR  ] (sed RE) (syntax) {testcase}')
+            exit()
+            
 
+        if output_std:
+            command = (f'clang -xc {testcase}.sy -include '
+                    f'{runtime_lib_dir}/sylib.h '
+                    f'-S -emit-llvm -o {std_ir_path} -O3')
 
-        command = (f'clang -xc {testcase}.sy -include '
-                   f'{runtime_lib_dir}/sylib.h '
-                   f'-S -emit-llvm -o {std_ir_path} -O3')
+            exec_result = execute(command, exec_timeout)
+            log(log_file, command, exec_result)
 
-        exec_result = execute(command, exec_timeout)
-        log(log_file, command, exec_result)
+            command = (f'llc -opaque-pointers -march=riscv64 {ir_path} '
+                     f'-o {std_asm_from_ir_path}')
 
-        command = (f'llc -opaque-pointers -march=riscv64 {ir_path} '
-                   f'-o {std_asm_from_ir_path}')
+            exec_result = execute(command, exec_timeout)
+            log(log_file, command, exec_result)
 
-        exec_result = execute(command, exec_timeout)
-        log(log_file, command, exec_result)
+            if exec_result['returncode'] is None:
+                result_md_table += f"| `{testcase}` | ⚠️ std ir->asm CE | {datetime.datetime.now() - start_test_time}| \n"
+                print(f'[  ERROR  ] (std ir->asm CE) {testcase}')
+                exit()
 
-        if exec_result['returncode'] is None:
-            result_md_table += f"| `{testcase}` | ⚠️ std ir->asm CE |\n"
-            print(f'[  ERROR  ] (stdir->asm CE) {testcase}')
-            continue
-
-
-        command = (f'qemu-riscv64 {exec_path} >{out_path}' if in_path is None
-                   else f'qemu-riscv64 {exec_path} <{in_path} >{out_path}')
+        if test_ir:
+            command = (f'lli -opaque-pointers {exec_path} >{out_path}' if in_path is None
+                     else f'lli -opaque-pointers {exec_path} <{in_path} >{out_path}')
+        else:
+            command = (f'qemu-riscv64 {exec_path} >{out_path}' if in_path is None
+                    else f'qemu-riscv64 {exec_path} <{in_path} >{out_path}')
+        
+        
 
         exec_result = execute(command, exec_timeout)
 
@@ -217,51 +228,71 @@ def test(executable_path: str, testcase_dir: str, output_dir: str,
             f.write('\n')
 
         is_equal = check_file(out_path, std_out_path, diff_path)
-        total_time = datetime.datetime.now() - start_time
+
         if exec_result['returncode'] is None:
             if exec_result['stderr'] == 'TIMEOUT':
-                result_md_table += f'| `{testcase}` | ⏱️ TLE |\n'
-                print(f'[  ERROR  ] (TLE) {testcase}, check: {asm_path}, timeout: {exec_timeout}s')
+                result_md_table += f'| `{testcase}` | ⏱️ TLE | {datetime.datetime.now() - start_test_time} |\n'
+                print(f'[  ERROR  ] (TLE) {testcase}, check: {asm_path}')
             else:
                 # SOS icon
-                result_md_table += f'| `{testcase}` | 🆘 RE |\n'
+                result_md_table += f'| `{testcase}` | 🆘 RE | {datetime.datetime.now() - start_test_time} |\n'
                 print(f'[  ERROR  ] (RE) {testcase}, see: {log_path}')
         elif is_equal:
             correct_cnt += 1
-            result_md_table += f'| `{testcase}` | ✅ AC |\n'
-            print(f'[ CORRECT ] (AC) {testcase}, time: {total_time.total_seconds()}s')
+            result_md_table += f'| `{testcase}` | ✅ AC | {datetime.datetime.now() - start_test_time}| \n'
+            print(f'[ CORRECT ] (AC) {testcase}')
         else:
-            result_md_table += f'| `{testcase}` | ❌ WA |\n'
+            result_md_table += f'| `{testcase}` | ❌ WA | {datetime.datetime.now() - start_test_time} \n'
             print(f'[  ERROR  ] (WA) {testcase}, see: {log_path}')
 
         log(log_file, command, exec_result)
-        
-        
 
     result_md += f'Passed {correct_cnt}/{testcase_cnt} testcases.\n\n'
 
     result_md += result_md_table
 
-    with open(f'{output_dir}/result.md', 'w') as f:
+    with open(f'{output_dir}/../result.md', 'w') as f:
         f.write(result_md)
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--executable_path', type=str, default='./test')
+    parser.add_argument('--testcase_dir', type=str, default='./examples')
+    parser.add_argument('--output_dir', type=str, default='./output')
+    parser.add_argument('--runtime_lib_dir', type=str, default='./runtime-lib')
+    parser.add_argument('--timeout', type=int, default=150)
+    parser.add_argument('--test_ir', action='store_true', default=False)
+    parser.add_argument('--output_std', action='store_true', default=False)
+    args = parser.parse_args()
+    return args
+
 def main():
-    executable_path = "./test"
-    testcase_dir = "./examples"
-    output_dir = "./output"
-    runtime_lib_dir = "./runtime-lib"
-    timeout = 100000
+    args = parse_args()
+    executable_path = args.executable_path
+    testcase_dir = args.testcase_dir
+    output_dir = args.output_dir
+    runtime_lib_dir = args.runtime_lib_dir
+    timeout = args.timeout
+    test_ir = args.test_ir
+    output_std = args.output_std
+    if test_ir:
+        print('[  INFO  ] Test LLVM IR')
+    else:
+        print('[  INFO  ] Test RISC-V assembly')
     
     if os.path.exists(output_dir):
             shutil.rmtree(output_dir)
     if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-            
+    
+
     test(executable_path,
             testcase_dir,
             output_dir,
             runtime_lib_dir,
-            timeout)
+            timeout,
+            test_ir,
+            output_std)
 
 if __name__ == '__main__':
     main()
