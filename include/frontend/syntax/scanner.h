@@ -2,9 +2,9 @@
 #define yyHEADER_H 1
 #define yyIN_HEADER 1
 
-#line 6 "/app/include/frontend/syntax/scanner.h"
+#line 6 "./include/frontend/syntax/scanner.h"
 
-#line 8 "/app/include/frontend/syntax/scanner.h"
+#line 8 "./include/frontend/syntax/scanner.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -488,6 +488,6 @@ extern int yylex (yyscan_t yyscanner);
 #line 283 "/app/src/frontend/scanner.l"
 
 
-#line 492 "/app/include/frontend/syntax/scanner.h"
+#line 492 "./include/frontend/syntax/scanner.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

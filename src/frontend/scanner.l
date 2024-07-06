@@ -1,5 +1,5 @@
 %option reentrant noyywrap nounput yylineno
-%option header-file="/app/include/frontend/syntax/scanner.h"
+%option header-file="./include/frontend/syntax/scanner.h"
 
 %{
 
