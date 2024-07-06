@@ -1,0 +1,10 @@
+{
+    "executable": "/app/build/sed",
+    "input": [
+        "/app/tests/functional",
+        "/app/tests/hidden_functional"
+    ],
+    "expected": null,
+    "pwd": "/app/command",
+    "test": "/app/tests"
+}

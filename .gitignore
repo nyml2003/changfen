@@ -1,0 +1,9 @@
+cmake-*
+dev_config
+.idea
+build/
+.vscode/
+.cache/
+old/
+tests/output/
+tests/log/
