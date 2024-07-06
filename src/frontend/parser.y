@@ -11,7 +11,7 @@
 %define parse.trace
 %define parse.error verbose
 
-%define api.location.file "/app/include/frontend/syntax/location.h"
+%define api.location.file "../../../include/frontend/syntax/location.h"
 %define api.location.include { "frontend/syntax/location.h" }
 %define api.parser.class { Parser }
 %define api.namespace { sed::frontend }

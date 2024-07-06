@@ -55,7 +55,7 @@
 
 #line 17 "/app/src/frontend/parser.y"
 namespace  sed { namespace frontend  {
-#line 59 "/app/include/frontend/syntax/location.h"
+#line 59 "/app/src/frontend/syntax/../../../include/frontend/syntax/location.h"
 
   /// A point in a source file.
   class position
@@ -301,6 +301,6 @@ namespace  sed { namespace frontend  {
 
 #line 17 "/app/src/frontend/parser.y"
 } } //  sed::frontend 
-#line 305 "/app/include/frontend/syntax/location.h"
+#line 305 "/app/src/frontend/syntax/../../../include/frontend/syntax/location.h"
 
 #endif // !YY_YY_FRONTEND_SYNTAX_LOCATION_H__INCLUDED
