@@ -19,7 +19,5 @@ import shutil
 if os.path.exists(f'{result["test"]}/test'):
     os.remove(f'{result["test"]}/test')
 shutil.copy(result['executable'], f'{result["test"]}/test')
-with open(f'{parser.parse_args().pwd}/persist.json', 'w') as f:
-    f.write(json.dumps(result, indent=4))
     
 

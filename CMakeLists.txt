@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(SED_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(SED_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 set(SED_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
-set(SED_COMMAND_DIR ${CMAKE_SOURCE_DIR}/command)
 set(SED_UNIT_TEST_DIR ${SED_TEST_DIR}/unittest)
 set(SED_TEST_FUNCTIONAL_DIR ${SED_TEST_DIR}/functional)
 set(SED_TEST_HIDDEN_FUNCTIONAL_DIR ${SED_TEST_DIR}/hidden_functional)
@@ -74,10 +73,10 @@ add_executable(
 add_custom_command(
     TARGET sed
     POST_BUILD
-    COMMAND python3 ${SED_COMMAND_DIR}/persist.py
+    COMMAND python3 ${SED_TEST_DIR}/persist.py
     --executable $<TARGET_FILE:sed>
     --input ${SED_TEST_FUNCTIONAL_DIR} ${SED_TEST_HIDDEN_FUNCTIONAL_DIR}
-    --pwd ${SED_COMMAND_DIR}
+    --pwd ${SED_TEST_DIR}
     --test ${SED_TEST_DIR}
 )
 # find_package(GTest REQUIRED)
