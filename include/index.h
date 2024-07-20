@@ -15,6 +15,8 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include <unordered_map>
+#include <functional>
 
 template <class... Ts> struct overloaded : Ts...
 {

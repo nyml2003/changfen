@@ -44,7 +44,7 @@ class LivenessAnalysis
   public:
     std::unordered_map<InstructionID, InstructionNum> instr_id2num;
     std::unordered_map<InstructionNum, InstructionID> instr_num2id;
-    std::unordered_map<BasicBlockID, std::vector<Range>> live_range_map;
+    std::unordered_map<OperandID, std::vector<Range>> live_range_map;
 
     LivenessAnalysis() = default;
 
